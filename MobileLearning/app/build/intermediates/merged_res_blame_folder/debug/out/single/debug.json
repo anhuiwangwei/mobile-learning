@@ -1,0 +1,102 @@
+[
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_exam.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_exam.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_main.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_item_section.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/item_section.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_profile.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_item_section_child.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/item_section_child.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_exam_list.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_exam_list.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/drawable_ic_launcher.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/drawable/ic_launcher.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_item_chapter.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/item_chapter.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_course_detail.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_course_detail.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_course_list.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_course_list.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_video_study.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_video_study.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_my_exam.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_my_exam.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/drawable_ic_launcher_round.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/drawable/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_item_exam_record.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/item_exam_record.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_login.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_item_exam_list.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/item_exam_list.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_item_chapter_group.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/item_chapter_group.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_register.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_register.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/menu_navigation_menu.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/menu/navigation_menu.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_item_course.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/item_course.xml"
+    },
+    {
+        "merged": "com.mobilelearning.app-merged_res-34:/layout_activity_pdf_study.xml.flat",
+        "source": "com.mobilelearning.app-main-36:/layout/activity_pdf_study.xml"
+    }
+]
