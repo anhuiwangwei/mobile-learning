@@ -33,16 +33,6 @@
             </a-popconfirm>
           </template>
         </template>
-          <template v-if="column.key === 'action'">
-            <a @click="handleQuestions(record)">题目管理</a>
-            <a-divider type="vertical" />
-            <a @click="handleEdit(record)">编辑</a>
-            <a-divider type="vertical" />
-            <a-popconfirm title="确定删除该试卷吗?" @confirm="handleDelete(record)">
-              <a style="color: red">删除</a>
-            </a-popconfirm>
-          </template>
-        </template>
       </a-table>
     </a-card>
 

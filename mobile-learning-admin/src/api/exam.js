@@ -9,8 +9,5 @@ export const examApi = {
   getQuestions: (paperId) => request.get('/admin/exam/question/list', { params: { paperId } }),
   addQuestion: (data) => request.post('/admin/exam/question', data),
   updateQuestion: (data) => request.put('/admin/exam/question', data),
-  deleteQuestion: (id) => request.delete(`/admin/exam/question/${id}`),
-  getChapterExams: (chapterId) => request.get(`/admin/exam/chapter/${chapterId}/exams`),
-  bindExam: (data) => request.post('/admin/exam/chapter/exam', data),
-  unbindExam: (id) => request.delete(`/admin/exam/chapter/exam/${id}`)
+  deleteQuestion: (id) => request.delete(`/admin/exam/question/${id}`)
 }

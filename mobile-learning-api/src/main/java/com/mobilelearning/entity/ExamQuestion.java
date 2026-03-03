@@ -31,6 +31,8 @@ public class ExamQuestion implements Serializable {
 
     private Integer questionOrder;
 
+    private Integer isMultiple;
+
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 }

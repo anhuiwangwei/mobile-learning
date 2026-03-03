@@ -14,4 +14,5 @@ public class QuestionRequest {
     private Integer difficulty;
     private Integer score;
     private Integer questionOrder;
+    private Integer isMultiple;
 }

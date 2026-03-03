@@ -23,6 +23,7 @@ com/mobilelearning/entity/SysUser.class
 com/mobilelearning/service/impl/EduCourseServiceImpl.class
 com/mobilelearning/mapper/EduTeacherMapper.class
 com/mobilelearning/config/WebConfig.class
+com/mobilelearning/config/SwaggerConfig.class
 com/mobilelearning/mapper/EduCourseMapper.class
 com/mobilelearning/service/impl/ExamServiceImpl.class
 com/mobilelearning/service/ExamQuestionService.class

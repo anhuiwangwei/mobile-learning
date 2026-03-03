@@ -14,36 +14,52 @@
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
 
-    <RadioGroup
-        android:id="@+id/rg_options"
+    <LinearLayout
+        android:id="@+id/ll_option_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginBottom="24dp">
-        
-        <RadioButton
-            android:id="@+id/rb_option_a"
+
+        <RadioGroup
+            android:id="@+id/rg_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/rb_option_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="A. 选项 1"/>
+
+            <RadioButton
+                android:id="@+id/rb_option_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="B. 选项 2"/>
+
+            <RadioButton
+                android:id="@+id/rb_option_c"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="C. 选项 3"/>
+
+            <RadioButton
+                android:id="@+id/rb_option_d"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="D. 选项 4"/>
+        </RadioGroup>
+
+        <LinearLayout
+            android:id="@+id/ll_checkbox_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="A. 选项 1"/>
-        
-        <RadioButton
-            android:id="@+id/rb_option_b"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="B. 选项 2"/>
-        
-        <RadioButton
-            android:id="@+id/rb_option_c"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="C. 选项 3"/>
-        
-        <RadioButton
-            android:id="@+id/rb_option_d"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="D. 选项 4"/>
-    </RadioGroup>
+            android:orientation="vertical"
+            android:visibility="gone">
+        </LinearLayout>
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/et_answer"
@@ -57,7 +73,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="bottom">
-        
+
         <Button
             android:id="@+id/btn_next"
             android:layout_width="0dp"
@@ -65,7 +81,7 @@
             android:layout_weight="1"
             android:text="下一题"
             android:layout_marginEnd="8dp"/>
-        
+
         <Button
             android:id="@+id/btn_submit"
             android:layout_width="0dp"

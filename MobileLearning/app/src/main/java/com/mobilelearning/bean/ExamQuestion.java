@@ -13,6 +13,7 @@ public class ExamQuestion implements Serializable {
     private Integer difficulty;
     private Integer score;
     private Integer questionOrder;
+    private Integer isMultiple;
     private String userAnswer;
     private Integer isCorrect;
     private Integer score_obtained;
@@ -37,6 +38,8 @@ public class ExamQuestion implements Serializable {
     public void setScore(Integer score) { this.score = score; }
     public Integer getQuestionOrder() { return questionOrder; }
     public void setQuestionOrder(Integer questionOrder) { this.questionOrder = questionOrder; }
+    public Integer getIsMultiple() { return isMultiple; }
+    public void setIsMultiple(Integer isMultiple) { this.isMultiple = isMultiple; }
     public String getUserAnswer() { return userAnswer; }
     public void setUserAnswer(String userAnswer) { this.userAnswer = userAnswer; }
     public Integer getIsCorrect() { return isCorrect; }

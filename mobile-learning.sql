@@ -153,6 +153,7 @@ CREATE TABLE exam_question (
     difficulty      TINYINT         DEFAULT 1 COMMENT '难度: 1-5',
     score           INT             DEFAULT 5 COMMENT '分值',
     question_order  INT             NOT NULL DEFAULT 1 COMMENT '题目顺序',
+    is_multiple     TINYINT         DEFAULT 0 COMMENT '是否多选: 0-否, 1-是',
     create_time     DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     FOREIGN KEY (paper_id) REFERENCES exam_paper(id) ON DELETE CASCADE,
     INDEX idx_paper_id (paper_id)

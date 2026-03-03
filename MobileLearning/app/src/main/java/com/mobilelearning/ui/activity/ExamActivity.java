@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -36,19 +38,19 @@ public class ExamActivity extends AppCompatActivity {
     
     private TextView tvQuestionText;
     private RadioGroup rgOptions;
-    private RadioButton rbOptionA;
-    private RadioButton rbOptionB;
-    private RadioButton rbOptionC;
-    private RadioButton rbOptionD;
+    private LinearLayout llCheckBoxOptions;
     private EditText etAnswer;
     private Button btnSubmit;
     private Button btnNext;
+    private LinearLayout llOptionContainer;
+    private List<CheckBox> checkBoxList = new ArrayList<>();
     
     private List<ExamQuestion> questions = new ArrayList<>();
     private int currentIndex = 0;
     private Long examId;
     private Long recordId;
     private Long sectionId;
+    private boolean isMultiple = false;
     
     private Map<Long, String> answers = new HashMap<>();
     
@@ -67,13 +69,11 @@ public class ExamActivity extends AppCompatActivity {
     private void initViews() {
         tvQuestionText = findViewById(R.id.tv_question_text);
         rgOptions = findViewById(R.id.rg_options);
-        rbOptionA = findViewById(R.id.rb_option_a);
-        rbOptionB = findViewById(R.id.rb_option_b);
-        rbOptionC = findViewById(R.id.rb_option_c);
-        rbOptionD = findViewById(R.id.rb_option_d);
+        llCheckBoxOptions = findViewById(R.id.ll_checkbox_options);
         etAnswer = findViewById(R.id.et_answer);
         btnSubmit = findViewById(R.id.btn_submit);
         btnNext = findViewById(R.id.btn_next);
+        llOptionContainer = findViewById(R.id.ll_option_container);
         
         btnNext.setOnClickListener(v -> {
             saveCurrentAnswer();
@@ -128,29 +128,67 @@ public class ExamActivity extends AppCompatActivity {
         String questionText = (index + 1) + ". " + question.getQuestionContent();
         tvQuestionText.setText(questionText);
         
+        rgOptions.removeAllViews();
+        llCheckBoxOptions.removeAllViews();
+        checkBoxList.clear();
+        
+        isMultiple = "multiple".equals(question.getQuestionType()) || (question.getIsMultiple() != null && question.getIsMultiple() == 1);
+        
         if ("judge".equals(question.getQuestionType())) {
+            llOptionContainer.setVisibility(View.VISIBLE);
             rgOptions.setVisibility(View.VISIBLE);
+            llCheckBoxOptions.setVisibility(View.GONE);
             etAnswer.setVisibility(View.GONE);
-            rbOptionA.setText("正确");
-            rbOptionB.setText("错误");
-            rbOptionC.setVisibility(View.GONE);
-            rbOptionD.setVisibility(View.GONE);
-        } else if ("single".equals(question.getQuestionType())) {
-            rgOptions.setVisibility(View.VISIBLE);
-            etAnswer.setVisibility(View.GONE);
-            rbOptionC.setVisibility(View.VISIBLE);
-            rbOptionD.setVisibility(View.VISIBLE);
-            String[] optionArray = question.getOptions().split("\\|");
-            if (optionArray.length >= 4) {
-                rbOptionA.setText("A. " + optionArray[0]);
-                rbOptionB.setText("B. " + optionArray[1]);
-                rbOptionC.setText("C. " + optionArray[2]);
-                rbOptionD.setText("D. " + optionArray[3]);
-            }
+            
+            RadioButton rbTrue = new RadioButton(this);
+            rbTrue.setText("正确");
+            rgOptions.addView(rbTrue);
+            
+            RadioButton rbFalse = new RadioButton(this);
+            rbFalse.setText("错误");
+            rgOptions.addView(rbFalse);
         } else {
-            rgOptions.setVisibility(View.GONE);
-            etAnswer.setVisibility(View.VISIBLE);
+            llOptionContainer.setVisibility(View.VISIBLE);
+            String optionsStr = question.getOptions();
+            if (optionsStr != null && !optionsStr.isEmpty()) {
+                String[] optionArray = optionsStr.split("\\|");
+                
+                if (isMultiple) {
+                    rgOptions.setVisibility(View.GONE);
+                    llCheckBoxOptions.setVisibility(View.VISIBLE);
+                    
+                    for (int i = 0; i < optionArray.length; i++) {
+                        String optText = optionArray[i].trim();
+                        if (optText.startsWith(String.valueOf((char)('A' + i)) + ".")) {
+                            optText = optText.substring(3).trim();
+                        }
+                        
+                        CheckBox checkBox = new CheckBox(this);
+                        checkBox.setText(((char)('A' + i)) + ". " + optText);
+                        checkBox.setTag(String.valueOf((char)('A' + i)));
+                        llCheckBoxOptions.addView(checkBox);
+                        checkBoxList.add(checkBox);
+                    }
+                } else {
+                    rgOptions.setVisibility(View.VISIBLE);
+                    llCheckBoxOptions.setVisibility(View.GONE);
+                    etAnswer.setVisibility(View.GONE);
+                    
+                    for (int i = 0; i < optionArray.length; i++) {
+                        String optText = optionArray[i].trim();
+                        if (optText.startsWith(String.valueOf((char)('A' + i)) + ".")) {
+                            optText = optText.substring(3).trim();
+                        }
+                        
+                        RadioButton radioButton = new RadioButton(this);
+                        radioButton.setText(((char)('A' + i)) + ". " + optText);
+                        radioButton.setTag(String.valueOf((char)('A' + i)));
+                        rgOptions.addView(radioButton);
+                    }
+                }
+            }
         }
+        
         rgOptions.clearCheck();
         etAnswer.setText("");
     }
@@ -160,19 +198,30 @@ public class ExamActivity extends AppCompatActivity {
             ExamQuestion question = questions.get(currentIndex);
             String answer = "";
             
-            if (rgOptions.getVisibility() == View.VISIBLE) {
+            if ("judge".equals(question.getQuestionType())) {
                 int selectedId = rgOptions.getCheckedRadioButtonId();
-                if (selectedId == R.id.rb_option_a) {
-                    answer = "A";
-                } else if (selectedId == R.id.rb_option_b) {
-                    answer = "B";
-                } else if (selectedId == R.id.rb_option_c) {
-                    answer = "C";
-                } else if (selectedId == R.id.rb_option_d) {
-                    answer = "D";
+                if (selectedId == rgOptions.getChildAt(0).getId()) {
+                    answer = "true";
+                } else if (selectedId == rgOptions.getChildAt(1).getId()) {
+                    answer = "false";
                 }
+            } else if (isMultiple) {
+                StringBuilder sb = new StringBuilder();
+                for (CheckBox checkBox : checkBoxList) {
+                    if (checkBox.isChecked()) {
+                        if (sb.length() > 0) sb.append(",");
+                        sb.append(checkBox.getTag());
+                    }
+                }
+                answer = sb.toString();
             } else {
-                answer = etAnswer.getText().toString().trim();
+                int selectedId = rgOptions.getCheckedRadioButtonId();
+                if (selectedId != -1) {
+                    RadioButton rb = findViewById(selectedId);
+                    if (rb != null && rb.getTag() != null) {
+                        answer = rb.getTag().toString();
+                    }
+                }
             }
             
             if (!answer.isEmpty()) {

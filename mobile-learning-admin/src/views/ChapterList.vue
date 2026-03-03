@@ -12,8 +12,6 @@
           <template #extra>
             <a @click.stop="handleAddSection(chapter.id)">添加小节</a>
             <a-divider type="vertical" />
-            <a @click.stop="handleBindExam(chapter)">绑定考试</a>
-            <a-divider type="vertical" />
             <a @click.stop="handleEditChapter(chapter)">编辑</a>
             <a-divider type="vertical" />
             <a-popconfirm title="确定删除该章节吗？" @confirm="handleDeleteChapter(chapter.id)">
@@ -40,30 +38,6 @@
               </template>
             </template>
           </a-table>
-
-          <div style="margin-top: 16px">
-            <a-divider>章节考试</a-divider>
-            <a-table :columns="examColumns" :data-source="chapterExams[chapter.id] || []" :pagination="false" size="small" row-key="id">
-              <template #bodyCell="{ column, record }">
-                <template v-if="column.key === 'isRequired'">
-                  <a-tag :color="record.isRequired === 1 ? 'red' : 'default'">
-                    {{ record.isRequired === 1 ? '必须通过' : '可选' }}
-                  </a-tag>
-                </template>
-                <template v-if="column.key === 'passScore'">
-                  {{ record.passScore }}分
-                </template>
-                <template v-if="column.key === 'action'">
-                  <a-popconfirm title="确定解除绑定吗？" @confirm="handleUnbindExam(record.id)">
-                    <a style="color: red">解绑</a>
-                  </a-popconfirm>
-                </template>
-              </template>
-            </a-table>
-            <a-button type="dashed" size="small" @click="handleAddExam(chapter)" style="margin-top: 8px">
-              + 添加考试
-            </a-button>
-          </div>
         </a-collapse-panel>
       </a-collapse>
     </a-card>
@@ -149,28 +123,6 @@
         </a-form-item>
       </a-form>
     </a-modal>
-
-    <!-- 绑定考试 Modal -->
-    <a-modal v-model:open="examModalVisible" title="绑定考试" @ok="handleExamSubmit">
-      <a-form :model="examForm" :label-col="{ span: 6 }">
-        <a-form-item label="选择试卷" required>
-          <a-select v-model:value="examForm.examId" placeholder="请选择试卷">
-            <a-select-option v-for="paper in availablePapers" :key="paper.id" :value="paper.id">
-              {{ paper.paperName }}
-            </a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-form-item label="考试顺序">
-          <a-input-number v-model:value="examForm.examOrder" :min="1" />
-        </a-form-item>
-        <a-form-item label="必须通过">
-          <a-switch v-model:checked="examForm.isRequired" checked-children="是" unchecked-children="否" />
-        </a-form-item>
-        <a-form-item label="及格分数">
-          <a-input-number v-model:value="examForm.passScore" :min="0" :max="100" />
-        </a-form-item>
-      </a-form>
-    </a-modal>
   </div>
 </template>
 
@@ -194,17 +146,8 @@ const sectionColumns = [
   { title: '操作', key: 'action', width: 150 }
 ]
 
-const examColumns = [
-  { title: '试卷名称', dataIndex: 'paperName', key: 'paperName' },
-  { title: '顺序', dataIndex: 'examOrder', key: 'examOrder', width: 80 },
-  { title: '要求', key: 'isRequired', width: 100 },
-  { title: '及格分', key: 'passScore', width: 80 },
-  { title: '操作', key: 'action', width: 80 }
-]
-
 const chapters = ref([])
 const sectionsMap = ref({})
-const chapterExams = ref({})
 const activeChapters = ref([])
 const availablePapers = ref([])
 
@@ -229,10 +172,6 @@ const sectionForm = reactive({
   status: true,
   examId: null
 })
-
-const examModalVisible = ref(false)
-const examForm = reactive({ id: null, chapterId: null, examId: null, examOrder: 1, isRequired: true, passScore: 60 })
-const currentChapter = ref(null)
 
 const onSectionTypeChange = (e) => {
   sectionForm.contentUrl = '' // 切换类型时清空文件
@@ -275,9 +214,6 @@ const loadChapters = async () => {
     for (const chapter of res.data) {
       const secRes = await courseApi.getSections(chapter.id)
       sectionsMap.value[chapter.id] = secRes.data
-      
-      const examRes = await examApi.getChapterExams(chapter.id)
-      chapterExams.value[chapter.id] = examRes.data
     }
   } catch (e) {
     console.error('加载章节失败', e)
@@ -407,37 +343,6 @@ const handleSectionSubmit = async () => {
 const handleDeleteSection = async (id) => {
   await courseApi.deleteSection(id)
   message.success('删除成功')
-  loadChapters()
-}
-
-const handleBindExam = (chapter) => {
-  currentChapter.value = chapter
-  Object.assign(examForm, { id: null, chapterId: chapter.id, examId: null, examOrder: 1, isRequired: true, passScore: 60 })
-  examModalVisible.value = true
-}
-
-const handleAddExam = (chapter) => {
-  handleBindExam(chapter)
-}
-
-const handleExamSubmit = async () => {
-  if (!examForm.examId) {
-    message.error('请选择试卷')
-    return
-  }
-  try {
-    await examApi.bindExam(examForm)
-    message.success('绑定成功')
-    examModalVisible.value = false
-    loadChapters()
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-const handleUnbindExam = async (id) => {
-  await examApi.unbindExam(id)
-  message.success('解绑成功')
   loadChapters()
 }
 
