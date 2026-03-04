@@ -41,6 +41,25 @@ public class AdminController {
         return Result.success(response);
     }
 
+    @GetMapping("/teacher/current")
+    public Result<EduTeacher> getCurrentTeacher() {
+        Long userId = AuthContext.getUserId();
+        if (userId == null) {
+            return Result.error("未登录");
+        }
+        
+        LambdaQueryWrapper<EduTeacher> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(EduTeacher::getUserId, userId);
+        wrapper.eq(EduTeacher::getIsDeleted, 0);
+        EduTeacher teacher = eduTeacherMapper.selectOne(wrapper);
+        
+        if (teacher != null) {
+            return Result.success(teacher);
+        } else {
+            return Result.error("未找到关联的教师信息");
+        }
+    }
+
     @GetMapping("/user/list")
     public Result<Page<SysUser>> getUserList(
             @RequestParam(defaultValue = "1") Integer pageNum,

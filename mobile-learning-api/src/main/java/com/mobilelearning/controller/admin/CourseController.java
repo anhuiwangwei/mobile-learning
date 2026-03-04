@@ -54,6 +54,25 @@ public class CourseController {
 
     @PostMapping
     public Result<Void> addCourse(@RequestBody CourseRequest request) {
+        Long userId = AuthContext.getUserId();
+        String userRole = AuthContext.getRole();
+        
+        if (request.getTeacherId() == null) {
+            if ("teacher".equals(userRole)) {
+                LambdaQueryWrapper<EduTeacher> wrapper = new LambdaQueryWrapper<>();
+                wrapper.eq(EduTeacher::getUserId, userId);
+                wrapper.eq(EduTeacher::getIsDeleted, 0);
+                EduTeacher teacher = eduTeacherMapper.selectOne(wrapper);
+                if (teacher != null) {
+                    request.setTeacherId(teacher.getId());
+                } else {
+                    return Result.error("教师用户未找到关联的教师信息");
+                }
+            } else {
+                return Result.error("必须选择授课教师");
+            }
+        }
+        
         EduCourse course = new EduCourse();
         course.setCourseName(request.getCourseName());
         course.setCourseDesc(request.getCourseDesc());
@@ -61,6 +80,8 @@ public class CourseController {
         course.setCategoryId(request.getCategoryId());
         course.setTeacherId(request.getTeacherId());
         course.setDifficulty(request.getDifficulty());
+        course.setPageTurnTime(request.getPageTurnTime() != null ? request.getPageTurnTime() : 0);
+        course.setIsOrderLearning(request.getIsOrderLearning() != null ? request.getIsOrderLearning() : 0);
         course.setStatus(request.getStatus() != null ? request.getStatus() : 1);
         eduCourseMapper.insert(course);
         return Result.success();
@@ -75,6 +96,8 @@ public class CourseController {
             course.setCoverImage(request.getCoverImage());
             course.setCategoryId(request.getCategoryId());
             course.setDifficulty(request.getDifficulty());
+            course.setPageTurnTime(request.getPageTurnTime());
+            course.setIsOrderLearning(request.getIsOrderLearning());
             course.setStatus(request.getStatus());
             eduCourseMapper.updateById(course);
         }
@@ -186,6 +209,7 @@ public class CourseController {
         section.setDuration(request.getDuration());
         section.setPdfReadTime(request.getPdfReadTime() != null ? request.getPdfReadTime() : 300);
         section.setIsAllowSeek(request.getIsAllowSeek() != null ? request.getIsAllowSeek() : 1);
+        section.setIsNoDrag(request.getIsNoDrag() != null ? request.getIsNoDrag() : 0);
         section.setIsStepLearning(request.getIsStepLearning() != null ? request.getIsStepLearning() : 0);
         section.setIsFree(request.getIsFree() != null ? request.getIsFree() : 0);
         section.setSort(request.getSort());
@@ -205,6 +229,7 @@ public class CourseController {
             section.setDuration(request.getDuration());
             section.setPdfReadTime(request.getPdfReadTime());
             section.setIsAllowSeek(request.getIsAllowSeek());
+            section.setIsNoDrag(request.getIsNoDrag());
             section.setIsStepLearning(request.getIsStepLearning());
             section.setIsFree(request.getIsFree());
             section.setSort(request.getSort());

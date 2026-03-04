@@ -1,16 +1,35 @@
 <template>
   <div class="page-container">
     <a-card>
-      <a-form layout="inline" class="search-form">
+      <a-form
+        layout="inline"
+        class="search-form"
+      >
         <a-form-item label="用户名">
-          <a-input v-model:value="searchForm.username" placeholder="请输入用户名" />
+          <a-input
+            v-model:value="searchForm.username"
+            placeholder="请输入用户名"
+          />
         </a-form-item>
         <a-form-item label="手机号">
-          <a-input v-model:value="searchForm.phone" placeholder="请输入手机号" />
+          <a-input
+            v-model:value="searchForm.phone"
+            placeholder="请输入手机号"
+          />
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" @click="handleSearch">查询</a-button>
-          <a-button style="margin-left: 8px" @click="handleReset">重置</a-button>
+          <a-button
+            type="primary"
+            @click="handleSearch"
+          >
+            查询
+          </a-button>
+          <a-button
+            style="margin-left: 8px"
+            @click="handleReset"
+          >
+            重置
+          </a-button>
         </a-form-item>
       </a-form>
 
@@ -19,8 +38,8 @@
         :data-source="dataSource"
         :loading="loading"
         :pagination="pagination"
-        @change="handleTableChange"
         row-key="id"
+        @change="handleTableChange"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
@@ -35,16 +54,16 @@
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
             <a-popconfirm
+              v-if="record.status === 1"
               title="确定禁用该用户吗?"
               @confirm="handleDisable(record)"
-              v-if="record.status === 1"
             >
               <a style="color: orange">禁用</a>
             </a-popconfirm>
             <a-popconfirm
+              v-else
               title="确定启用该用户吗?"
               @confirm="handleEnable(record)"
-              v-else
             >
               <a style="color: green">启用</a>
             </a-popconfirm>
@@ -60,10 +79,20 @@
       </a-table>
     </a-card>
 
-    <a-modal v-model:open="editModalVisible" title="编辑用户" @ok="handleEditSubmit">
-      <a-form :model="editForm" :label-col="{ span: 6 }">
+    <a-modal
+      v-model:open="editModalVisible"
+      title="编辑用户"
+      @ok="handleEditSubmit"
+    >
+      <a-form
+        :model="editForm"
+        :label-col="{ span: 6 }"
+      >
         <a-form-item label="用户名">
-          <a-input v-model:value="editForm.username" disabled />
+          <a-input
+            v-model:value="editForm.username"
+            disabled
+          />
         </a-form-item>
         <a-form-item label="姓名">
           <a-input v-model:value="editForm.realName" />
@@ -168,7 +197,6 @@ const handleEdit = (record) => {
 
 const handleEditSubmit = async () => {
   try {
-    const { id, ...data } = editForm
     message.success('更新成功')
     editModalVisible.value = false
     loadData()

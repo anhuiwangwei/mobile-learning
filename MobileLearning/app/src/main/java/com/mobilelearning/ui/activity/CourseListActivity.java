@@ -57,15 +57,33 @@ public class CourseListActivity extends AppCompatActivity {
     
     private void loadCourses() {
         CourseApi api = RetrofitUtil.create(CourseApi.class);
-        api.getCourseList(null, 1).enqueue(new Callback<BaseResponse<List<Course>>>() {
+        api.getCourseList(null, 1).enqueue(new Callback<BaseResponse<List<Map<String, Object>>>>() {
             @Override
-            public void onResponse(Call<BaseResponse<List<Course>>> call, Response<BaseResponse<List<Course>>> response) {
+            public void onResponse(Call<BaseResponse<List<Map<String, Object>>>> call, Response<BaseResponse<List<Map<String, Object>>>> response) {
                 swipeRefresh.setRefreshing(false);
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     courseList.clear();
-                    List<Course> courses = response.body().getData();
-                    if (courses != null) {
-                        courseList.addAll(courses);
+                    List<Map<String, Object>> dataList = response.body().getData();
+                    if (dataList != null) {
+                        for (Map<String, Object> item : dataList) {
+                            Course course = new Course();
+                            Map<String, Object> courseMap = (Map<String, Object>) item.get("course");
+                            if (courseMap != null) {
+                                course.setId(((Number) courseMap.get("id")).longValue());
+                                course.setCourseName((String) courseMap.get("courseName"));
+                                course.setCourseDesc((String) courseMap.get("courseDesc"));
+                                course.setCoverImage((String) courseMap.get("coverImage"));
+                                course.setDifficulty((Integer) courseMap.get("difficulty"));
+                                course.setDuration((Integer) courseMap.get("duration"));
+                                course.setPageTurnTime((Integer) courseMap.get("pageTurnTime"));
+                                course.setIsOrderLearning((Integer) courseMap.get("isOrderLearning"));
+                                course.setStatus((Integer) courseMap.get("status"));
+                                course.setViewCount((Integer) courseMap.get("viewCount"));
+                            }
+                            course.setTeacherName((String) item.get("teacherName"));
+                            course.setProgress((Map<String, Object>) item.get("progress"));
+                            courseList.add(course);
+                        }
                         adapter.notifyDataSetChanged();
                     }
                 } else {
@@ -74,7 +92,7 @@ public class CourseListActivity extends AppCompatActivity {
             }
             
             @Override
-            public void onFailure(Call<BaseResponse<List<Course>>> call, Throwable t) {
+            public void onFailure(Call<BaseResponse<List<Map<String, Object>>>> call, Throwable t) {
                 swipeRefresh.setRefreshing(false);
                 Toast.makeText(CourseListActivity.this, "网络错误", Toast.LENGTH_SHORT).show();
             }

@@ -1,9 +1,11 @@
 <template>
   <a-layout class="layout-container">
     <a-layout-header class="header">
-      <div class="logo">移动学习平台</div>
+      <div class="logo">
+        移动学习平台
+      </div>
       <a-menu
-        v-model:selectedKeys="selectedKeys"
+        v-model:selected-keys="selectedKeys"
         theme="dark"
         mode="horizontal"
         :items="menuItems"
@@ -17,11 +19,17 @@
           </a>
           <template #overlay>
             <a-menu>
-              <a-menu-item key="profile" @click="handleProfile">
+              <a-menu-item
+                key="profile"
+                @click="handleProfile"
+              >
                 个人资料
               </a-menu-item>
               <a-menu-divider />
-              <a-menu-item key="logout" @click="handleLogout">
+              <a-menu-item
+                key="logout"
+                @click="handleLogout"
+              >
                 退出登录
               </a-menu-item>
             </a-menu>
@@ -36,7 +44,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { message } from 'ant-design-vue'
 import { DownOutlined } from '@ant-design/icons-vue'

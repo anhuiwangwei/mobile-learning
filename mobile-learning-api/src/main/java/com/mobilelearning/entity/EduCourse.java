@@ -27,6 +27,10 @@ public class EduCourse implements Serializable {
 
     private Integer duration;
 
+    private Integer pageTurnTime;
+
+    private Integer isOrderLearning;
+
     private Integer status;
 
     private Integer viewCount;

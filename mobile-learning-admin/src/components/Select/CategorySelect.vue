@@ -6,12 +6,24 @@
     :disabled="disabled"
     @change="handleChange"
   >
-    <a-select-opt-group v-for="category in categories" :key="category.id" :label="category.categoryName">
-      <a-select-option v-for="child in category.children" :key="child.id" :value="child.id">
+    <a-select-opt-group
+      v-for="category in categories"
+      :key="category.id"
+      :label="category.categoryName"
+    >
+      <a-select-option
+        v-for="child in category.children"
+        :key="child.id"
+        :value="child.id"
+      >
         {{ child.categoryName }}
       </a-select-option>
     </a-select-opt-group>
-    <a-select-option v-for="category in categories.filter(c => c.parentId === 0)" :key="category.id" :value="category.id">
+    <a-select-option
+      v-for="category in categories.filter(c => c.parentId === 0)"
+      :key="category.id"
+      :value="category.id"
+    >
       {{ category.categoryName }}
     </a-select-option>
   </a-select>
@@ -23,7 +35,10 @@ import { message } from 'ant-design-vue'
 import { categoryApi } from '@/api/category'
 
 const props = defineProps({
-  modelValue: [Number, String],
+  modelValue: {
+    type: [Number, String],
+    default: undefined
+  },
   placeholder: {
     type: String,
     default: '请选择分类'

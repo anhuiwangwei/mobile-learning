@@ -5,15 +5,26 @@
     :custom-request="handleUpload"
     :before-upload="beforeUpload"
   >
-    <div v-if="imageUrl" class="image-preview">
-      <img :src="imageUrl" alt="preview" />
+    <div
+      v-if="imageUrl"
+      class="image-preview"
+    >
+      <img
+        :src="imageUrl"
+        alt="preview"
+      >
       <div class="image-mask">
         <span>更换图片</span>
       </div>
     </div>
-    <div v-else class="upload-placeholder">
+    <div
+      v-else
+      class="upload-placeholder"
+    >
       <PlusOutlined />
-      <div style="margin-top: 8px">点击上传</div>
+      <div style="margin-top: 8px">
+        点击上传
+      </div>
     </div>
   </a-upload>
 </template>
@@ -25,7 +36,10 @@ import { PlusOutlined } from '@ant-design/icons-vue'
 import axios from 'axios'
 
 const props = defineProps({
-  modelValue: String,
+  modelValue: {
+    type: String,
+    default: undefined
+  },
   accept: {
     type: String,
     default: 'image/*'
@@ -56,16 +70,16 @@ const beforeUpload = (file) => {
 const handleUpload = async ({ file, onSuccess, onError }) => {
   const formData = new FormData()
   formData.append('file', file)
-  
+
   try {
     const token = localStorage.getItem('token')
     const { data } = await axios.post('/admin/file/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     })
-    
+
     if (data.code === 200) {
       imageUrl.value = data.data.url
       emit('update:modelValue', data.data.url)

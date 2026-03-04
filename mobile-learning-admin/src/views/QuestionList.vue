@@ -1,13 +1,27 @@
 <template>
   <div class="page-container">
     <a-card>
-      <a-page-header title="题目管理" :sub-title="`试卷: ${paperName}`" @back="() => router.push('/exams')">
+      <a-page-header
+        title="题目管理"
+        :sub-title="`试卷: ${paperName}`"
+        @back="() => router.push('/exams')"
+      >
         <template #extra>
-          <a-button type="primary" @click="handleAdd">添加题目</a-button>
+          <a-button
+            type="primary"
+            @click="handleAdd"
+          >
+            添加题目
+          </a-button>
         </template>
       </a-page-header>
 
-      <a-table :columns="columns" :data-source="dataSource" :loading="loading" row-key="id">
+      <a-table
+        :columns="columns"
+        :data-source="dataSource"
+        :loading="loading"
+        row-key="id"
+      >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'questionType'">
             <a-tag :color="record.questionType === 'multiple' ? 'purple' : (record.questionType === 'single' ? 'blue' : 'orange')">
@@ -25,7 +39,10 @@
           <template v-if="column.key === 'action'">
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
-            <a-popconfirm title="确定删除该题目吗？" @confirm="handleDelete(record.id)">
+            <a-popconfirm
+              title="确定删除该题目吗？"
+              @confirm="handleDelete(record.id)"
+            >
               <a style="color: red">删除</a>
             </a-popconfirm>
           </template>
@@ -33,67 +50,161 @@
       </a-table>
     </a-card>
 
-    <a-modal v-model:open="modalVisible" :title="isEdit ? '编辑题目' : '添加题目'" @ok="handleSubmit" width="700px">
-      <a-form :model="form" :label-col="{ span: 4 }">
-        <a-form-item label="题型" required>
-          <a-radio-group v-model:value="form.questionType" @change="onQuestionTypeChange">
-            <a-radio value="single">单选题</a-radio>
-            <a-radio value="multiple">多选题</a-radio>
-            <a-radio value="judge">判断题</a-radio>
+    <a-modal
+      v-model:open="modalVisible"
+      :title="isEdit ? '编辑题目' : '添加题目'"
+      width="700px"
+      @ok="handleSubmit"
+    >
+      <a-form
+        :model="form"
+        :label-col="{ span: 4 }"
+      >
+        <a-form-item
+          label="题型"
+          required
+        >
+          <a-radio-group
+            v-model:value="form.questionType"
+            @change="onQuestionTypeChange"
+          >
+            <a-radio value="single">
+              单选题
+            </a-radio>
+            <a-radio value="multiple">
+              多选题
+            </a-radio>
+            <a-radio value="judge">
+              判断题
+            </a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item label="是否为多选" required v-if="form.questionType === 'single'">
-          <a-switch v-model:checked="form.isMultiple" checked-children="多选" un-checked-children="单选" />
+        <a-form-item
+          v-if="form.questionType === 'single'"
+          label="是否为多选"
+          required
+        >
+          <a-switch
+            v-model:checked="form.isMultiple"
+            checked-children="多选"
+            un-checked-children="单选"
+          />
         </a-form-item>
-        <a-form-item label="题目内容" required>
-          <a-textarea v-model:value="form.questionContent" :rows="2" placeholder="请输入题目内容" />
+        <a-form-item
+          label="题目内容"
+          required
+        >
+          <a-textarea
+            v-model:value="form.questionContent"
+            :rows="2"
+            placeholder="请输入题目内容"
+          />
         </a-form-item>
-        <a-form-item label="选项" required v-if="form.questionType !== 'judge'">
-          <div v-for="(option, index) in form.optionList" :key="index" style="display: flex; align-items: center; margin-bottom: 8px;">
+        <a-form-item
+          v-if="form.questionType !== 'judge'"
+          label="选项"
+          required
+        >
+          <div
+            v-for="(option, index) in form.optionList"
+            :key="index"
+            style="display: flex; align-items: center; margin-bottom: 8px;"
+          >
             <span style="margin-right: 8px;">{{ String.fromCharCode(65 + index) }}.</span>
-            <a-input v-model:value="option.text" placeholder="请输入选项内容" style="flex: 1; margin-right: 8px;" />
-            <a-button type="text" danger @click="removeOption(index)" :disabled="form.optionList.length <= 2">
-              <template #icon><DeleteOutlined /></template>
+            <a-input
+              v-model:value="option.text"
+              placeholder="请输入选项内容"
+              style="flex: 1; margin-right: 8px;"
+            />
+            <a-button
+              type="text"
+              danger
+              :disabled="form.optionList.length <= 2"
+              @click="removeOption(index)"
+            >
+              <template #icon>
+                <DeleteOutlined />
+              </template>
             </a-button>
           </div>
-          <a-button type="dashed" block @click="addOption" style="margin-top: 8px;">
-            <template #icon><PlusOutlined /></template>
+          <a-button
+            type="dashed"
+            block
+            style="margin-top: 8px;"
+            @click="addOption"
+          >
+            <template #icon>
+              <PlusOutlined />
+            </template>
             添加选项
           </a-button>
         </a-form-item>
-        <a-form-item label="正确答案" required>
+        <a-form-item
+          label="正确答案"
+          required
+        >
           <template v-if="form.questionType === 'judge'">
             <a-radio-group v-model:value="form.answer">
-              <a-radio value="true">正确</a-radio>
-              <a-radio value="false">错误</a-radio>
+              <a-radio value="true">
+                正确
+              </a-radio>
+              <a-radio value="false">
+                错误
+              </a-radio>
             </a-radio-group>
           </template>
           <template v-else-if="form.isMultiple">
-            <a-select v-model:value="form.answer" mode="multiple" placeholder="选择正确答案" style="width: 100%;">
-              <a-select-option v-for="(option, index) in form.optionList" :key="index" :value="String.fromCharCode(65 + index)">
+            <a-select
+              v-model:value="form.answer"
+              mode="multiple"
+              placeholder="选择正确答案"
+              style="width: 100%;"
+            >
+              <a-select-option
+                v-for="(option, index) in form.optionList"
+                :key="index"
+                :value="String.fromCharCode(65 + index)"
+              >
                 {{ String.fromCharCode(65 + index) }}. {{ option.text }}
               </a-select-option>
             </a-select>
           </template>
           <template v-else>
-            <a-select v-model:value="form.answer" placeholder="选择正确答案">
-              <a-select-option v-for="(option, index) in form.optionList" :key="index" :value="String.fromCharCode(65 + index)">
+            <a-select
+              v-model:value="form.answer"
+              placeholder="选择正确答案"
+            >
+              <a-select-option
+                v-for="(option, index) in form.optionList"
+                :key="index"
+                :value="String.fromCharCode(65 + index)"
+              >
                 {{ String.fromCharCode(65 + index) }}. {{ option.text }}
               </a-select-option>
             </a-select>
           </template>
         </a-form-item>
         <a-form-item label="答案解析">
-          <a-textarea v-model:value="form.analysis" :rows="2" placeholder="请输入答案解析" />
+          <a-textarea
+            v-model:value="form.analysis"
+            :rows="2"
+            placeholder="请输入答案解析"
+          />
         </a-form-item>
         <a-form-item label="分值">
-          <a-input-number v-model:value="form.score" :min="1" />
+          <a-input-number
+            v-model:value="form.score"
+            :min="1"
+          />
         </a-form-item>
         <a-form-item label="难度">
           <a-rate v-model:value="form.difficulty" />
         </a-form-item>
         <a-form-item label="排序">
-          <a-input-number v-model:value="form.questionOrder" :min="1" />
+          <a-input-number
+            v-model:value="form.questionOrder"
+            :min="1"
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -220,8 +331,7 @@ const handleSubmit = async () => {
       isMultiple: form.isMultiple ? 1 : 0,
       answer: Array.isArray(form.answer) ? form.answer.join(',') : form.answer
     }
-    if (isEdit.value) { await examApi.updateQuestion(submitData); message.success('更新成功') }
-    else { await examApi.addQuestion(submitData); message.success('添加成功') }
+    if (isEdit.value) { await examApi.updateQuestion(submitData); message.success('更新成功') } else { await examApi.addQuestion(submitData); message.success('添加成功') }
     modalVisible.value = false; loadData()
   } catch (e) { console.error(e) }
 }

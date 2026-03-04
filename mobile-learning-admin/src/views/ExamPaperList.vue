@@ -1,24 +1,55 @@
 <template>
   <div class="page-container">
     <a-card>
-      <a-form layout="inline" class="search-form">
+      <a-form
+        layout="inline"
+        class="search-form"
+      >
         <a-form-item label="试卷名称">
-          <a-input v-model:value="searchForm.paperName" placeholder="请输入试卷名称" />
+          <a-input
+            v-model:value="searchForm.paperName"
+            placeholder="请输入试卷名称"
+          />
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" @click="handleSearch">查询</a-button>
-          <a-button style="margin-left: 8px" @click="handleReset">重置</a-button>
+          <a-button
+            type="primary"
+            @click="handleSearch"
+          >
+            查询
+          </a-button>
+          <a-button
+            style="margin-left: 8px"
+            @click="handleReset"
+          >
+            重置
+          </a-button>
         </a-form-item>
       </a-form>
 
       <div class="table-operations">
-        <a-button type="primary" @click="handleAdd">添加试卷</a-button>
+        <a-button
+          type="primary"
+          @click="handleAdd"
+        >
+          添加试卷
+        </a-button>
       </div>
 
-      <a-table :columns="columns" :data-source="dataSource" :loading="loading" :pagination="pagination" @change="handleTableChange" row-key="id">
+      <a-table
+        :columns="columns"
+        :data-source="dataSource"
+        :loading="loading"
+        :pagination="pagination"
+        row-key="id"
+        @change="handleTableChange"
+      >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'status'">
-            <a-switch :checked="record.status === 1" @change="(checked) => handleStatusChange(record, checked)" />
+            <a-switch
+              :checked="record.status === 1"
+              @change="(checked) => handleStatusChange(record, checked)"
+            />
           </template>
           <template v-if="column.key === 'createTime'">
             {{ formatDate(record.createTime) }}
@@ -28,7 +59,10 @@
             <a-divider type="vertical" />
             <a @click="handleEdit(record)">编辑</a>
             <a-divider type="vertical" />
-            <a-popconfirm title="确定删除该试卷吗？" @confirm="handleDelete(record)">
+            <a-popconfirm
+              title="确定删除该试卷吗？"
+              @confirm="handleDelete(record)"
+            >
               <a style="color: red">删除</a>
             </a-popconfirm>
           </template>
@@ -36,22 +70,48 @@
       </a-table>
     </a-card>
 
-    <a-modal v-model:open="modalVisible" :title="isEdit ? '编辑试卷' : '添加试卷'" @ok="handleSubmit">
-      <a-form :model="form" :label-col="{ span: 6 }">
-        <a-form-item label="试卷名称" required>
-          <a-input v-model:value="form.paperName" placeholder="请输入试卷名称" />
+    <a-modal
+      v-model:open="modalVisible"
+      :title="isEdit ? '编辑试卷' : '添加试卷'"
+      @ok="handleSubmit"
+    >
+      <a-form
+        :model="form"
+        :label-col="{ span: 6 }"
+      >
+        <a-form-item
+          label="试卷名称"
+          required
+        >
+          <a-input
+            v-model:value="form.paperName"
+            placeholder="请输入试卷名称"
+          />
         </a-form-item>
         <a-form-item label="总分">
-          <a-input-number v-model:value="form.totalScore" :min="0" />
+          <a-input-number
+            v-model:value="form.totalScore"
+            :min="0"
+          />
         </a-form-item>
         <a-form-item label="及格分数">
-          <a-input-number v-model:value="form.passScore" :min="0" />
+          <a-input-number
+            v-model:value="form.passScore"
+            :min="0"
+          />
         </a-form-item>
         <a-form-item label="考试时长(分钟)">
-          <a-input-number v-model:value="form.duration" :min="1" />
+          <a-input-number
+            v-model:value="form.duration"
+            :min="1"
+          />
         </a-form-item>
         <a-form-item label="状态">
-          <a-switch v-model:checked="form.status" checked-children="启用" unchecked-children="禁用" />
+          <a-switch
+            v-model:checked="form.status"
+            checked-children="启用"
+            unchecked-children="禁用"
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -106,8 +166,7 @@ const handleSubmit = async () => {
   if (!form.paperName) { message.error('请输入试卷名称'); return }
   try {
     const data = { ...form, status: form.status ? 1 : 0 }
-    if (isEdit.value) { await examApi.updatePaper(data); message.success('更新成功') }
-    else { await examApi.addPaper(data); message.success('添加成功') }
+    if (isEdit.value) { await examApi.updatePaper(data); message.success('更新成功') } else { await examApi.addPaper(data); message.success('添加成功') }
     modalVisible.value = false; loadData()
   } catch (e) { console.error(e) }
 }

@@ -46,8 +46,9 @@ public class SectionAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_section, parent, false);
             holder = new ViewHolder();
             holder.tvSectionName = convertView.findViewById(R.id.tv_section_name);
-            holder.tvSectionType = convertView.findViewById(R.id.tv_section_type);
+            holder.tvSectionIcon = convertView.findViewById(R.id.tv_section_icon);
             holder.tvDuration = convertView.findViewById(R.id.tv_duration);
+            holder.tvNoDrag = convertView.findViewById(R.id.tv_no_drag);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -56,13 +57,23 @@ public class SectionAdapter extends BaseAdapter {
         Section section = sectionList.get(position);
         holder.tvSectionName.setText(section.getSectionName());
         
-        String type = "video".equals(section.getSectionType()) ? "视频" : "PDF";
-        holder.tvSectionType.setText(type);
-        
         if ("video".equals(section.getSectionType())) {
+            holder.tvSectionIcon.setText("📹");
             holder.tvDuration.setText(section.getDuration() + "秒");
-        } else {
+            
+            if (section.getIsNoDrag() != null && section.getIsNoDrag() == 1) {
+                holder.tvNoDrag.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvNoDrag.setVisibility(View.GONE);
+            }
+        } else if ("pdf".equals(section.getSectionType())) {
+            holder.tvSectionIcon.setText("📄");
             holder.tvDuration.setText(section.getDuration() + "页");
+            holder.tvNoDrag.setVisibility(View.GONE);
+        } else if ("exam".equals(section.getSectionType())) {
+            holder.tvSectionIcon.setText("📝");
+            holder.tvDuration.setText("");
+            holder.tvNoDrag.setVisibility(View.GONE);
         }
         
         return convertView;
@@ -70,7 +81,8 @@ public class SectionAdapter extends BaseAdapter {
     
     static class ViewHolder {
         TextView tvSectionName;
-        TextView tvSectionType;
+        TextView tvSectionIcon;
         TextView tvDuration;
+        TextView tvNoDrag;
     }
 }

@@ -10,15 +10,15 @@ export const useUserStore = defineStore('user', {
     userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}')
   }),
   actions: {
-    setToken(newToken) {
+    setToken (newToken) {
       this.token = newToken
       localStorage.setItem('token', newToken)
     },
-    setUserInfo(info) {
+    setUserInfo (info) {
       this.userInfo = info
       localStorage.setItem('userInfo', JSON.stringify(info))
     },
-    logout() {
+    logout () {
       this.token = ''
       this.userInfo = {}
       localStorage.removeItem('token')

@@ -34,6 +34,7 @@
 /Users/bob/dev/mobile-learning/mobile-learning-api/src/main/java/com/mobilelearning/service/AuthService.java
 /Users/bob/dev/mobile-learning/mobile-learning-api/src/main/java/com/mobilelearning/entity/EduChapter.java
 /Users/bob/dev/mobile-learning/mobile-learning-api/src/main/java/com/mobilelearning/mapper/EduTeacherMapper.java
+/Users/bob/dev/mobile-learning/mobile-learning-api/src/main/java/com/mobilelearning/config/SwaggerConfig.java
 /Users/bob/dev/mobile-learning/mobile-learning-api/src/main/java/com/mobilelearning/common/AuthContext.java
 /Users/bob/dev/mobile-learning/mobile-learning-api/src/main/java/com/mobilelearning/entity/EduCourse.java
 /Users/bob/dev/mobile-learning/mobile-learning-api/src/main/java/com/mobilelearning/service/impl/EduCourseServiceImpl.java

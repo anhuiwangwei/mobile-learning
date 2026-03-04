@@ -1,24 +1,31 @@
 <template>
-    <a-select
-      v-model:value="selectedValue"
-      :placeholder="placeholder"
-      :loading="loading"
-      :disabled="disabled"
-      @change="handleChange"
+  <a-select
+    v-model:value="selectedValue"
+    :placeholder="placeholder"
+    :loading="loading"
+    :disabled="disabled"
+    @change="handleChange"
+  >
+    <a-select-option
+      v-for="teacher in teachers"
+      :key="teacher.id"
+      :value="teacher.id"
     >
-      <a-select-option v-for="teacher in teachers" :key="teacher.id" :value="teacher.id">
-        {{ teacher.teacherNo }} - {{ teacher.realName || teacher.nickname }}
-      </a-select-option>
-    </a-select>
+      {{ teacher.teacherNo }} - {{ teacher.realName || teacher.nickname }}
+    </a-select-option>
+  </a-select>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { message } from 'ant-design-vue'
 import { teacherApi } from '@/api/teacher'
 
 const props = defineProps({
-  modelValue: [Number, String],
+  modelValue: {
+    type: [Number, String],
+    default: undefined
+  },
   placeholder: {
     type: String,
     default: '请选择教师'

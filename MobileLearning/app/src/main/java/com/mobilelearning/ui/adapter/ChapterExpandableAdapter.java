@@ -98,11 +98,49 @@ public class ChapterExpandableAdapter extends BaseExpandableListAdapter {
             convertView = inflater.inflate(R.layout.item_section_child, parent, false);
             holder = new ChildViewHolder();
             holder.tvSectionName = convertView.findViewById(R.id.tv_section_name);
+            holder.tvSectionIcon = convertView.findViewById(R.id.tv_section_icon);
+            holder.tvDuration = convertView.findViewById(R.id.tv_duration);
             holder.tvSectionType = convertView.findViewById(R.id.tv_section_type);
             convertView.setTag(holder);
         } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
+        
+        Section section = chapterList.get(groupPosition).getSections().get(childPosition);
+        holder.tvSectionName.setText(section.getSectionName());
+        
+        if ("video".equals(section.getSectionType())) {
+            holder.tvSectionIcon.setText("📹");
+            holder.tvDuration.setText(section.getDuration() + "秒");
+            holder.tvSectionType.setText("视频");
+        } else if ("pdf".equals(section.getSectionType())) {
+            holder.tvSectionIcon.setText("📄");
+            holder.tvDuration.setText(section.getDuration() + "页");
+            holder.tvSectionType.setText("PDF");
+        } else if ("exam".equals(section.getSectionType())) {
+            holder.tvSectionIcon.setText("📝");
+            holder.tvDuration.setText("");
+            holder.tvSectionType.setText("考试");
+        } else {
+            holder.tvSectionIcon.setText("");
+            holder.tvDuration.setText("");
+            holder.tvSectionType.setText("其他");
+        }
+        
+        return convertView;
+    }
+    
+    static class GroupViewHolder {
+        TextView tvChapterName;
+        TextView tvSectionCount;
+    }
+    
+    static class ChildViewHolder {
+        TextView tvSectionName;
+        TextView tvSectionIcon;
+        TextView tvDuration;
+        TextView tvSectionType;
+    }
         
         Section section = chapterList.get(groupPosition).getSections().get(childPosition);
         holder.tvSectionName.setText(section.getSectionName());

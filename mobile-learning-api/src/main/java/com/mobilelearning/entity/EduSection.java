@@ -27,6 +27,8 @@ public class EduSection implements Serializable {
 
     private Integer isAllowSeek;
 
+    private Integer isNoDrag;
+
     private Integer isStepLearning;
 
     private Integer isFree;

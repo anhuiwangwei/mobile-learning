@@ -12,6 +12,7 @@ public class SectionRequest {
     private Integer duration;
     private Integer pdfReadTime;
     private Integer isAllowSeek;
+    private Integer isNoDrag;
     private Integer isStepLearning;
     private Integer isFree;
     private Integer sort;

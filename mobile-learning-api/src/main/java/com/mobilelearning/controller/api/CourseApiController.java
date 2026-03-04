@@ -25,9 +25,10 @@ public class CourseApiController {
     private final EduChapterMapper eduChapterMapper;
     private final EduSectionMapper eduSectionMapper;
     private final EduLearningProgressMapper eduLearningProgressMapper;
+    private final EduTeacherMapper eduTeacherMapper;
 
     @GetMapping("/list")
-    public Result<List<EduCourse>> getCourseList(
+    public Result<List<Map<String, Object>>> getCourseList(
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Integer status) {
         LambdaQueryWrapper<EduCourse> wrapper = new LambdaQueryWrapper<>();
@@ -40,7 +41,29 @@ public class CourseApiController {
             wrapper.eq(EduCourse::getStatus, 1);
         }
         wrapper.orderByDesc(EduCourse::getCreateTime);
-        return Result.success(eduCourseMapper.selectList(wrapper));
+        List<EduCourse> courses = eduCourseMapper.selectList(wrapper);
+        
+        Long userId = AuthContext.getUserId();
+        List<Map<String, Object>> result = new ArrayList<>();
+        
+        for (EduCourse course : courses) {
+            Map<String, Object> courseMap = new HashMap<>();
+            courseMap.put("course", course);
+            
+            if (userId != null) {
+                Map<String, Object> progress = getCourseProgressMap(course.getId(), userId);
+                courseMap.put("progress", progress);
+            }
+            
+            EduTeacher teacher = eduTeacherMapper.selectById(course.getTeacherId());
+            if (teacher != null) {
+                courseMap.put("teacherName", teacher.getRealName());
+            }
+            
+            result.add(courseMap);
+        }
+        
+        return Result.success(result);
     }
 
     @GetMapping("/{id}")
@@ -124,7 +147,11 @@ public class CourseApiController {
     @GetMapping("/{courseId}/progress")
     public Result<Map<String, Object>> getCourseProgress(@PathVariable Long courseId) {
         Long userId = AuthContext.getUserId();
-        
+        Map<String, Object> progress = getCourseProgressMap(courseId, userId);
+        return Result.success(progress);
+    }
+    
+    private Map<String, Object> getCourseProgressMap(Long courseId, Long userId) {
         LambdaQueryWrapper<EduChapter> chapterWrapper = new LambdaQueryWrapper<>();
         chapterWrapper.eq(EduChapter::getCourseId, courseId);
         chapterWrapper.orderByAsc(EduChapter::getChapterOrder);
@@ -158,6 +185,15 @@ public class CourseApiController {
                     if (eduLearningProgressMapper.selectCount(progressWrapper) > 0) {
                         completedPdf++;
                     }
+                } else if ("exam".equals(section.getSectionType())) {
+                    totalExam++;
+                    LambdaQueryWrapper<EduLearningProgress> progressWrapper = new LambdaQueryWrapper<>();
+                    progressWrapper.eq(EduLearningProgress::getUserId, userId);
+                    progressWrapper.eq(EduLearningProgress::getSectionId, section.getId());
+                    progressWrapper.eq(EduLearningProgress::getIsCompleted, 1);
+                    if (eduLearningProgressMapper.selectCount(progressWrapper) > 0) {
+                        completedExam++;
+                    }
                 }
             }
         }
@@ -176,6 +212,6 @@ public class CourseApiController {
         progress.put("completed", completed);
         progress.put("percentage", total > 0 ? (completed * 100 / total) : 0);
         
-        return Result.success(progress);
+        return progress;
     }
 }

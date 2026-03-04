@@ -10,11 +10,15 @@ public class Course implements Serializable {
     private String coverImage;
     private Long categoryId;
     private Long teacherId;
+    private String teacherName;
     private Integer difficulty;
     private Integer duration;
+    private Integer pageTurnTime;
+    private Integer isOrderLearning;
     private Integer status;
     private Integer viewCount;
     private List<Chapter> chapters;
+    private Map<String, Object> progress;
     
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -28,14 +32,22 @@ public class Course implements Serializable {
     public void setCategoryId(Long categoryId) { this.categoryId = categoryId; }
     public Long getTeacherId() { return teacherId; }
     public void setTeacherId(Long teacherId) { this.teacherId = teacherId; }
+    public String getTeacherName() { return teacherName; }
+    public void setTeacherName(String teacherName) { this.teacherName = teacherName; }
     public Integer getDifficulty() { return difficulty; }
     public void setDifficulty(Integer difficulty) { this.difficulty = difficulty; }
     public Integer getDuration() { return duration; }
     public void setDuration(Integer duration) { this.duration = duration; }
+    public Integer getPageTurnTime() { return pageTurnTime; }
+    public void setPageTurnTime(Integer pageTurnTime) { this.pageTurnTime = pageTurnTime; }
+    public Integer getIsOrderLearning() { return isOrderLearning; }
+    public void setIsOrderLearning(Integer isOrderLearning) { this.isOrderLearning = isOrderLearning; }
     public Integer getStatus() { return status; }
     public void setStatus(Integer status) { this.status = status; }
     public Integer getViewCount() { return viewCount; }
     public void setViewCount(Integer viewCount) { this.viewCount = viewCount; }
     public List<Chapter> getChapters() { return chapters; }
     public void setChapters(List<Chapter> chapters) { this.chapters = chapters; }
+    public Map<String, Object> getProgress() { return progress; }
+    public void setProgress(Map<String, Object> progress) { this.progress = progress; }
 }

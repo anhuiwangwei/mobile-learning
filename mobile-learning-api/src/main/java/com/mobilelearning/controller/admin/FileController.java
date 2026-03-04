@@ -23,6 +23,9 @@ public class FileController {
     @Value("${file.upload.path:./uploads}")
     private String uploadPath;
 
+    @Value("${file.upload.base-url:http://localhost:8080}")
+    private String baseUrl;
+
     @PostMapping("/upload")
     public Result<Map<String, String>> upload(@RequestParam("file") MultipartFile file) {
         if (file == null || file.isEmpty()) {
@@ -62,7 +65,7 @@ public class FileController {
             file.transferTo(filePath.toFile());
             
             // 生成访问 URL
-            String url = "/static/" + fileType + "/" + dateDir + "/" + newFilename;
+            String url = baseUrl + "/static/" + fileType + "/" + dateDir + "/" + newFilename;
             
             Map<String, String> result = new HashMap<>();
             result.put("url", url);

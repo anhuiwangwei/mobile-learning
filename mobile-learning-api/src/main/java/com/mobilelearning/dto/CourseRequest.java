@@ -10,6 +10,9 @@ public class CourseRequest {
     private String coverImage;
     private Long categoryId;
     private Long teacherId;
+    private String teacherName;
     private Integer difficulty;
+    private Integer pageTurnTime;
+    private Integer isOrderLearning;
     private Integer status;
 }

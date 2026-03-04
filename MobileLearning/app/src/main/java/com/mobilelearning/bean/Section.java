@@ -11,6 +11,7 @@ public class Section implements Serializable {
     private Integer duration;
     private Integer pdfReadTime;
     private Integer isAllowSeek;
+    private Integer isNoDrag;
     private Integer isStepLearning;
     private Integer isFree;
     private Integer sort;
@@ -33,6 +34,8 @@ public class Section implements Serializable {
     public void setPdfReadTime(Integer pdfReadTime) { this.pdfReadTime = pdfReadTime; }
     public Integer getIsAllowSeek() { return isAllowSeek; }
     public void setIsAllowSeek(Integer isAllowSeek) { this.isAllowSeek = isAllowSeek; }
+    public Integer getIsNoDrag() { return isNoDrag; }
+    public void setIsNoDrag(Integer isNoDrag) { this.isNoDrag = isNoDrag; }
     public Integer getIsStepLearning() { return isStepLearning; }
     public void setIsStepLearning(Integer isStepLearning) { this.isStepLearning = isStepLearning; }
     public Integer getIsFree() { return isFree; }

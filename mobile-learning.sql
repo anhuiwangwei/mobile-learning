@@ -65,15 +65,17 @@ CREATE TABLE edu_category (
 -- ============================================================
 DROP TABLE IF EXISTS edu_course;
 CREATE TABLE edu_course (
-    id              BIGINT          PRIMARY KEY AUTO_INCREMENT COMMENT '主键ID',
+    id              BIGINT          PRIMARY KEY AUTO_INCREMENT COMMENT '主键 ID',
     course_name     VARCHAR(100)    NOT NULL COMMENT '课程名称',
     course_desc     TEXT            COMMENT '课程描述',
-    cover_image     VARCHAR(255)    COMMENT '封面图片URL',
-    category_id     BIGINT          COMMENT '分类ID(edu_category.id)',
-    teacher_id      BIGINT          NOT NULL COMMENT '授课教师ID(edu_teacher.id)',
-    difficulty      TINYINT         DEFAULT 1 COMMENT '难度等级: 1-5',
-    duration        INT             DEFAULT 0 COMMENT '总时长(分钟)',
-    status          TINYINT         NOT NULL DEFAULT 1 COMMENT '状态: 0下架, 1上架',
+    cover_image     VARCHAR(255)    COMMENT '封面图片 URL',
+    category_id     BIGINT          COMMENT '分类 ID(edu_category.id)',
+    teacher_id      BIGINT          NOT NULL COMMENT '授课教师 ID(edu_teacher.id)',
+    difficulty      TINYINT         DEFAULT 1 COMMENT '难度等级：1-5',
+    duration        INT             DEFAULT 0 COMMENT '总时长 (分钟)',
+    page_turn_time  INT             DEFAULT 0 COMMENT '翻页时长 (秒),0 表示不限制',
+    is_order_learning TINYINT       DEFAULT 0 COMMENT '是否顺序学习：0 否，1 是',
+    status          TINYINT         NOT NULL DEFAULT 1 COMMENT '状态：0 下架，1 上架',
     view_count      INT             DEFAULT 0 COMMENT '浏览量',
     create_time     DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time     DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -307,3 +309,10 @@ SELECT '数据库初始化完成！' AS result;
 
 -- 更新现有数据库结构 (如果表已存在)
 ALTER TABLE edu_teacher ADD COLUMN IF NOT EXISTS avatar VARCHAR(255) COMMENT '教师头像' AFTER teacher_no;
+
+-- 添加课程新字段
+ALTER TABLE edu_course ADD COLUMN IF NOT EXISTS page_turn_time INT DEFAULT 0 COMMENT '翻页时长 (秒),0 表示不限制' AFTER duration;
+ALTER TABLE edu_course ADD COLUMN IF NOT EXISTS is_order_learning TINYINT DEFAULT 0 COMMENT '是否顺序学习：0 否，1 是' AFTER page_turn_time;
+
+-- 添加小节 is_no_drag 字段（视频是否允许拖动）
+ALTER TABLE edu_section ADD COLUMN IF NOT EXISTS is_no_drag TINYINT DEFAULT 0 COMMENT '是否禁止拖动：0 否，1 是 (仅视频有效)' AFTER is_allow_seek;

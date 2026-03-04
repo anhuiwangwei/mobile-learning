@@ -15,7 +15,7 @@ import retrofit2.http.Query;
 public interface CourseApi {
     
     @GET("api/course/list")
-    Call<BaseResponse<List<Course>>> getCourseList(@Query("categoryId") Long categoryId, @Query("status") Integer status);
+    Call<BaseResponse<List<Map<String, Object>>>> getCourseList(@Query("categoryId") Long categoryId, @Query("status") Integer status);
     
     @GET("api/course/{id}")
     Call<BaseResponse<Map<String, Object>>> getCourseDetail(@Path("id") Long id);

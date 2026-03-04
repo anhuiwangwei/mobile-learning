@@ -1,18 +1,39 @@
 <template>
   <div class="page-container">
     <a-card>
-      <a-form layout="inline" class="search-form">
+      <a-form
+        layout="inline"
+        class="search-form"
+      >
         <a-form-item label="工号">
-          <a-input v-model:value="searchForm.teacherNo" placeholder="请输入工号" />
+          <a-input
+            v-model:value="searchForm.teacherNo"
+            placeholder="请输入工号"
+          />
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" @click="handleSearch">查询</a-button>
-          <a-button style="margin-left: 8px" @click="handleReset">重置</a-button>
+          <a-button
+            type="primary"
+            @click="handleSearch"
+          >
+            查询
+          </a-button>
+          <a-button
+            style="margin-left: 8px"
+            @click="handleReset"
+          >
+            重置
+          </a-button>
         </a-form-item>
       </a-form>
 
       <div class="table-operations">
-        <a-button type="primary" @click="handleAdd">添加教师</a-button>
+        <a-button
+          type="primary"
+          @click="handleAdd"
+        >
+          添加教师
+        </a-button>
       </div>
 
       <a-table
@@ -20,12 +41,16 @@
         :data-source="dataSource"
         :loading="loading"
         :pagination="pagination"
-        @change="handleTableChange"
         row-key="id"
+        @change="handleTableChange"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.key === 'avatar'">
-            <img v-if="record.avatar" :src="record.avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" />
+            <img
+              v-if="record.avatar"
+              :src="record.avatar"
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;"
+            >
             <span v-else>-</span>
           </template>
           <template v-if="column.key === 'createTime'">
@@ -51,24 +76,57 @@
       @ok="handleSubmit"
       @cancel="handleCancel"
     >
-      <a-form :model="form" :label-col="{ span: 6 }">
-        <a-form-item label="姓名" required>
-          <a-input v-model:value="form.realName" placeholder="请输入姓名" />
+      <a-form
+        :model="form"
+        :label-col="{ span: 6 }"
+      >
+        <a-form-item
+          label="姓名"
+          required
+        >
+          <a-input
+            v-model:value="form.realName"
+            placeholder="请输入姓名"
+          />
         </a-form-item>
-        <a-form-item label="手机号" required>
-          <a-input v-model:value="form.phone" placeholder="请输入手机号" :disabled="isEdit" />
+        <a-form-item
+          label="手机号"
+          required
+        >
+          <a-input
+            v-model:value="form.phone"
+            placeholder="请输入手机号"
+            :disabled="isEdit"
+          />
         </a-form-item>
-        <a-form-item label="工号" required>
-          <a-input v-model:value="form.teacherNo" placeholder="请输入工号" />
+        <a-form-item
+          label="工号"
+          required
+        >
+          <a-input
+            v-model:value="form.teacherNo"
+            placeholder="请输入工号"
+          />
         </a-form-item>
         <a-form-item label="头像">
-          <ImageUpload v-model="form.avatar" :max-size="5" accept="image/*" />
-          <div v-if="form.avatar" style="margin-top: 8px; font-size: 12px; color: #666">
+          <ImageUpload
+            v-model="form.avatar"
+            :max-size="5"
+            accept="image/*"
+          />
+          <div
+            v-if="form.avatar"
+            style="margin-top: 8px; font-size: 12px; color: #666"
+          >
             头像地址：{{ form.avatar }}
           </div>
         </a-form-item>
         <a-form-item label="简介">
-          <a-textarea v-model:value="form.intro" :rows="3" placeholder="请输入教师简介" />
+          <a-textarea
+            v-model:value="form.intro"
+            :rows="3"
+            placeholder="请输入教师简介"
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -114,6 +172,7 @@ const loadData = async () => {
     const res = await teacherApi.list({
       pageNum: pagination.current,
       pageSize: pagination.pageSize,
+      isDeleted: 0,
       ...searchForm
     })
     dataSource.value = res.data.records
@@ -159,9 +218,14 @@ const handleSubmit = async () => {
 
 const handleCancel = () => { modalVisible.value = false }
 const handleDelete = async (record) => {
-  await teacherApi.delete(record.id)
-  message.success('删除成功')
-  loadData()
+  try {
+    await teacherApi.delete(record.id)
+    message.success('删除成功')
+    loadData()
+  } catch (e) {
+    console.error(e)
+    message.error('删除失败')
+  }
 }
 
 onMounted(() => { loadData() })

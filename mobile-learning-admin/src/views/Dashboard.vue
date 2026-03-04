@@ -55,24 +55,49 @@
       </a-col>
     </a-row>
 
-    <a-row :gutter="16" style="margin-top: 16px">
+    <a-row
+      :gutter="16"
+      style="margin-top: 16px"
+    >
       <a-col :span="12">
         <a-card title="学习数据">
-          <a-descriptions bordered :column="2">
-            <a-descriptions-item label="今日学习人数">{{ stats.todayLearners || 0 }}</a-descriptions-item>
-            <a-descriptions-item label="总学习时长">{{ stats.totalStudyTime || 0 }}分钟</a-descriptions-item>
-            <a-descriptions-item label="完成课程数">{{ stats.completedCourses || 0 }}</a-descriptions-item>
-            <a-descriptions-item label="通过考试数">{{ stats.passedExams || 0 }}</a-descriptions-item>
+          <a-descriptions
+            bordered
+            :column="2"
+          >
+            <a-descriptions-item label="今日学习人数">
+              {{ stats.todayLearners || 0 }}
+            </a-descriptions-item>
+            <a-descriptions-item label="总学习时长">
+              {{ stats.totalStudyTime || 0 }}分钟
+            </a-descriptions-item>
+            <a-descriptions-item label="完成课程数">
+              {{ stats.completedCourses || 0 }}
+            </a-descriptions-item>
+            <a-descriptions-item label="通过考试数">
+              {{ stats.passedExams || 0 }}
+            </a-descriptions-item>
           </a-descriptions>
         </a-card>
       </a-col>
       <a-col :span="12">
         <a-card title="课程数据">
-          <a-descriptions bordered :column="2">
-            <a-descriptions-item label="上架课程">{{ stats.onShelfCourses || 0 }}</a-descriptions-item>
-            <a-descriptions-item label="下架课程">{{ stats.offShelfCourses || 0 }}</a-descriptions-item>
-            <a-descriptions-item label="总章节数">{{ stats.totalChapters || 0 }}</a-descriptions-item>
-            <a-descriptions-item label="总小节数">{{ stats.totalSections || 0 }}</a-descriptions-item>
+          <a-descriptions
+            bordered
+            :column="2"
+          >
+            <a-descriptions-item label="上架课程">
+              {{ stats.onShelfCourses || 0 }}
+            </a-descriptions-item>
+            <a-descriptions-item label="下架课程">
+              {{ stats.offShelfCourses || 0 }}
+            </a-descriptions-item>
+            <a-descriptions-item label="总章节数">
+              {{ stats.totalChapters || 0 }}
+            </a-descriptions-item>
+            <a-descriptions-item label="总小节数">
+              {{ stats.totalSections || 0 }}
+            </a-descriptions-item>
           </a-descriptions>
         </a-card>
       </a-col>
@@ -105,7 +130,7 @@ const loadStats = async () => {
     const token = localStorage.getItem('token')
     const res = await axios.get('/admin/stats/dashboard', {
       headers: {
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`
       }
     })
     if (res.data.code === 200) {

@@ -46,11 +46,11 @@ export const formatRelative = (date) => {
  */
 export const formatDuration = (seconds) => {
   if (!seconds && seconds !== 0) return '-'
-  
+
   const hours = Math.floor(seconds / 3600)
   const minutes = Math.floor((seconds % 3600) / 60)
   const secs = seconds % 60
-  
+
   if (hours > 0) {
     return `${hours}小时${minutes}分`
   } else if (minutes > 0) {
